@@ -1,0 +1,23 @@
+{
+  "name": "dp-rest-api",
+  "version": "1.0.0",
+  "description": "Rest api for my university thesis.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lexajosef/dp-rest-api.git"
+  },
+  "keywords": ["thesis", "express", "rest", "api"],
+  "author": "Josef Lexa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lexajosef/dp-rest-api/issues"
+  },
+  "homepage": "https://github.com/lexajosef/dp-rest-api#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
