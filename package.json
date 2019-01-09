@@ -10,7 +10,12 @@
     "type": "git",
     "url": "git+https://github.com/lexajosef/dp-rest-api.git"
   },
-  "keywords": ["thesis", "express", "rest", "api"],
+  "keywords": [
+    "thesis",
+    "express",
+    "rest",
+    "api"
+  ],
   "author": "Josef Lexa",
   "license": "ISC",
   "bugs": {
@@ -18,6 +23,7 @@
   },
   "homepage": "https://github.com/lexajosef/dp-rest-api#readme",
   "dependencies": {
+    "config": "^3.0.1",
     "express": "^4.16.4"
   }
 }
