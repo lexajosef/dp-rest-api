@@ -1,3 +1,4 @@
 {
+  "jwtPrivateKey": "topSecret",
   "port": "3000"
 }

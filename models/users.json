@@ -1,10 +1,14 @@
 [
   {
-    "name": "Josef",
-    "password": "asd"
+    "id": 1,
+    "name": "Josef Lexa",
+    "email": "lexa@gmail.com",
+    "password": "12345"
   },
   {
-    "name": "Lexa",
-    "password": "dsa"
+    "id": 1,
+    "name": "John Smith",
+    "email": "johnsmith@gmail.com",
+    "password": "abcde"
   }
 ]
