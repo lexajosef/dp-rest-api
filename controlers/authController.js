@@ -22,12 +22,12 @@ class authController {
     // find user
     const user = await User.findUser(req.body.email);
     if (!user) {
-      return res.status(400).send("Invalid user.");
+      return res.status(400).send('Invalid user.');
     }
 
     // validate password TODO: with some hashing
     if (user.password !== req.body.password) {
-      return res.status(400).send("Invalid password.");
+      return res.status(400).send('Invalid password.');
     }
 
     // generate and send auth token

@@ -1,4 +1,4 @@
-const mockUsers = require('./users.json');
+const mockUsers = require('./mock-data/users.json');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 
@@ -24,7 +24,6 @@ class User {
   }
 
   static findUser(email) {
-    // TODO: find and return user from mockUsers
     return new Promise((resolve) => {
       mockUsers.forEach(user => {
         if (user.email === email) {
