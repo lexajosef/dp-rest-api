@@ -22,6 +22,10 @@ class User {
       config.get('jwtPrivateKey')
     );
   }
+  
+  saveUser() {
+    // TODO: save user to mockUsers
+  }
 
   static findUser(email) {
     return new Promise((resolve) => {
