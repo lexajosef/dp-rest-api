@@ -20,7 +20,7 @@ class authController {
     }
 
     // find user
-    const user = await User.findUser(req.body.email);
+    const user = await User.findOne(req.body.email);
     if (!user) {
       return res.status(400).send('Invalid user.');
     }

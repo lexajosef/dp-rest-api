@@ -1,6 +1,9 @@
-const mockUsers = require('./mock-data/users.json');
+const mockUsers = require('../data/users.json');
+const sys = require('../data/sys.json');
+
 const jwt = require('jsonwebtoken');
 const config = require('config');
+const fs = require('fs');
 
 class User {
 
@@ -23,11 +26,21 @@ class User {
     );
   }
   
-  saveUser() {
-    // TODO: save user to mockUsers
+  static create(name, email, password) {
+    return new Promise((resolve) => {
+      sys.lastUserId = sys.lastUserId + 1;
+      const user = new User(sys.lastUserId, name, email, password);
+
+      mockUsers.push(user);
+
+      fs.writeFileSync('./data/users.json', JSON.stringify(mockUsers));
+      fs.writeFileSync('./data/sys.json', JSON.stringify(sys));
+      
+      resolve(user);
+    });
   }
 
-  static findUser(email) {
+  static findOne(email) {
     return new Promise((resolve) => {
       mockUsers.forEach(user => {
         if (user.email === email) {

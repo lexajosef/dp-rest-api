@@ -12,14 +12,14 @@ app.use(function(req, res, next) {
 });
 require('./startup/routes')(app);
 
-app.get('/', (req, res) => {
+/*app.get('/', (req, res) => {
   console.log(req.user);
   res.send('Hello world!');
 });
 app.get('/world', auth, (req, res) => {
   console.log(req.user);
   res.send('The Secret Hello World!');
-});
+});*/
 
 const port = process.env.PORT || config.get('port');
 app.listen(port, () => { 
