@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/authorization');
-const commentsController = require('../controlers/exampleController');
 
 router.post('/', auth, (req, res) => {
   // TODO: implement

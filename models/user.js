@@ -28,11 +28,14 @@ class User {
   
   static create(name, email, password) {
     return new Promise((resolve) => {
-      sys.lastUserId = sys.lastUserId + 1;
+      if (sys.lastUserId) sys.lastUserId++;
+      else sys.lastUserId = 1;
+
       const user = new User(sys.lastUserId, name, email, password);
 
       mockUsers.push(user);
 
+      // TODO: try catch and reject promise
       fs.writeFileSync('./data/users.json', JSON.stringify(mockUsers));
       fs.writeFileSync('./data/sys.json', JSON.stringify(sys));
       
@@ -43,9 +46,7 @@ class User {
   static findOne(email) {
     return new Promise((resolve) => {
       mockUsers.forEach(user => {
-        if (user.email === email) {
-          resolve(new User(user.id, user.name, user.email, user.password));
-        }
+        if (user.email === email) resolve(user);
       });
 
       resolve(null);
