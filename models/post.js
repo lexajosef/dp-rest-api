@@ -33,13 +33,19 @@ class Post {
   }
 
   static update(postObject) {
-    // TODO: find and update post object in data/post.json
+    // TODO: find and update post object in data/posts.json
+  }
+
+  static delete(postId) {
+    // TODO: find and delte post object in data/posts.json
   }
 
   static findOne(postId) {
     return new Promise((resolve) => {
       mockPosts.forEach(post => {
-        if (post.id === postId) resolve(post);
+        if (post.id === postId) {
+          resolve(new Post(post.id, post.userId, post.title, post.html, post.dateOfCreation, post.dateOfModification));
+        }
       });
 
       resolve(null);

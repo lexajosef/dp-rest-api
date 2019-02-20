@@ -46,7 +46,9 @@ class User {
   static findOne(email) {
     return new Promise((resolve) => {
       mockUsers.forEach(user => {
-        if (user.email === email) resolve(user);
+        if (user.email === email) {
+          resolve(new User(user.id, user.name, user.email, user.password));
+        }
       });
 
       resolve(null);
