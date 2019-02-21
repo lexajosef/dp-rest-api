@@ -32,6 +32,18 @@ class UsersController {
     // send user in response to client
     res.send(JSON.stringify(user));
   }
+
+  static async editUser(req, res) {
+
+  }
+
+  static async getUser(req, res) {
+
+  }
+
+  static async getUserPosts(req, res) {
+    
+  }
 }
 
 module.exports = UsersController;
