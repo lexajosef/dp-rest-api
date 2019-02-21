@@ -37,18 +37,34 @@ class Post {
   }
 
   static delete(postId) {
-    // TODO: find and delte post object in data/posts.json
+    return new Promise((resolve, reject) => {
+      postId = Number(postId);
+      if (isNaN(postId)) reject('The id param must be a number.');
+
+      let sizeBeforeRemove = mockPosts.length;
+      const resultPosts = mockPosts.filter(post => post.id !== postId);
+      let sizeAfterRemove = resultPosts.length;
+
+      if (sizeBeforeRemove > sizeAfterRemove) {
+        fs.writeFileSync('./data/posts.json', JSON.stringify(resultPosts));
+        resolve(true);
+      }
+
+      reject('Post with this id not exist.');
+    });
   }
 
   static findOne(postId) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
+      postId = Number(postId);
+      if (isNaN(postId)) reject('The id param must be a number.');
+
       mockPosts.forEach(post => {
-        if (post.id === postId) {
-          resolve(new Post(post.id, post.userId, post.title, post.html, post.dateOfCreation, post.dateOfModification));
-        }
+        if (post.id === postId) resolve(new Post(post.id, post.userId, post.title, post.html, post.dateOfCreation, 
+            post.dateOfModification));
       });
 
-      resolve(null);
+      reject('Post with this id not exist.');
     });
   }
 }
