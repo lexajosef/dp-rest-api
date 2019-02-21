@@ -32,8 +32,23 @@ class Post {
     });
   }
 
-  static update(postObject) {
-    // TODO: find and update post object in data/posts.json
+  static update(postId, title, html, dateOfModification) {
+    return new Promise((resolve, reject) => {
+      postId = Number(postId);
+      if (isNaN(postId)) reject('The postId param must be a number.');
+
+      mockPosts.forEach(post => {
+        if (post.id === postId) {
+          post.title = title;
+          post.html = html;
+          post.dateOfModification = dateOfModification;
+
+          resolve(post);
+        }
+      });
+      
+      reject('Post with this id not exist.');
+    });
   }
 
   static delete(postId) {
@@ -41,9 +56,9 @@ class Post {
       postId = Number(postId);
       if (isNaN(postId)) reject('The id param must be a number.');
 
-      let sizeBeforeRemove = mockPosts.length;
+      const sizeBeforeRemove = mockPosts.length;
       const resultPosts = mockPosts.filter(post => post.id !== postId);
-      let sizeAfterRemove = resultPosts.length;
+      const sizeAfterRemove = resultPosts.length;
 
       if (sizeBeforeRemove > sizeAfterRemove) {
         fs.writeFileSync('./data/posts.json', JSON.stringify(resultPosts));

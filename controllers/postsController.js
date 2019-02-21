@@ -16,9 +16,7 @@ class postsController {
   static async createPost(req, res) {
     // validate req body
     const { error } = validate(req.body);
-    if (error) {
-      return res.status(400).send(error.details[0].message);
-    }
+    if (error) return res.status(400).send(error.details[0].message);
 
     let post = await Post.create(req.user.id, req.body.title, req.body.html, Date(), Date());
 
@@ -27,7 +25,16 @@ class postsController {
   }
 
   static async editPost(req, res) {
-    // TODO: implement
+    // validate req body
+    const { error } = validate(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    try {
+      const post = await Post.update(req.params.postId, req.body.title, req.body.html, Date());
+      res.send(JSON.stringify(post));
+    } catch(e) {
+      res.status(400).send(e);
+    }
   }
   
   static async deletePost(req, res) {
@@ -35,19 +42,17 @@ class postsController {
       await Post.delete(req.params.postId);
       res.send('The post has been deleted.');
     } catch(e) {
-      return res.status(400).send(e);
+      res.status(400).send(e);
     }
   }
 
   static async getPost(req, res) {
     try {
-      let post = await Post.findOne(req.params.postId);
-      res.send(post);
+      const post = await Post.findOne(req.params.postId);
+      res.send(JSON.stringify(post));
     } catch(e) {
-      return res.status(400).send(e);
+      res.status(400).send(e);
     }
-
-    res.send(JSON.stringify(post));
   }
 }
 
