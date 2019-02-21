@@ -11,7 +11,7 @@ function validate(postObject) {
   return Joi.validate(postObject, schema);
 }
 
-class postsController {
+class PostsController {
 
   static async createPost(req, res) {
     // validate req body
@@ -56,4 +56,4 @@ class postsController {
   }
 }
 
-module.exports = postsController;
+module.exports = PostsController;

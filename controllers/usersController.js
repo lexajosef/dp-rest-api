@@ -11,7 +11,7 @@ function validate(userObject) {
   return Joi.validate(userObject, schema);
 }
 
-class usersController {
+class UsersController {
 
   static async createUser(req, res) {
     // validate req body
@@ -34,4 +34,4 @@ class usersController {
   }
 }
 
-module.exports = usersController;
+module.exports = UsersController;

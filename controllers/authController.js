@@ -10,7 +10,7 @@ function validate(userObject) {
   return Joi.validate(userObject, schema);
 }
 
-class authController {
+class AuthController {
 
   static async authenticateUser(req, res) {
     // validate req body
@@ -36,4 +36,4 @@ class authController {
   }
 }
 
-module.exports = authController;
+module.exports = AuthController;
