@@ -17,14 +17,15 @@ class Post {
 
   static create(userId, title, html, dateOfCreation, dateOfModification) {
     return new Promise((resolve) => {
-      if (sys.lastPostId) sys.lastPostId++;
-      else sys.lastPostId = 1;
+      if (sys.lastPostId) {
+        sys.lastPostId++;
+      } else {
+        sys.lastPostId = 1;
+      }
 
       const post = new Post(sys.lastPostId, userId, title, html, dateOfCreation, dateOfModification);
 
       mockPosts.push(post);
-
-      // TODO: try catch and reject promise
       fs.writeFileSync('./data/posts.json', JSON.stringify(mockPosts));
       fs.writeFileSync('./data/sys.json', JSON.stringify(sys));
 
@@ -32,32 +33,27 @@ class Post {
     });
   }
 
-  static update(postId, title, html, dateOfModification) {
-    return new Promise((resolve, reject) => {
-      postId = Number(postId);
-      if (isNaN(postId)) reject('The postId param must be a number.');
-
+  static findOneAndUpdate(id, postObject) {
+    return new Promise((resolve) => {
       mockPosts.forEach(post => {
-        if (post.id === postId) {
-          post.title = title;
-          post.html = html;
-          post.dateOfModification = dateOfModification;
+        if (post.id === id) {
+          post.title = postObject.title;
+          post.html = postObject.html;
+          post.dateOfModification = postObject.dateOfModification;
 
+          fs.writeFileSync('./data/posts.json', JSON.stringify(mockPosts));
           resolve(post);
         }
       });
       
-      reject('Post with this id not exist.');
+      resolve(null);
     });
   }
 
-  static delete(postId) {
-    return new Promise((resolve, reject) => {
-      postId = Number(postId);
-      if (isNaN(postId)) reject('The id param must be a number.');
-
+  static delete(id) {
+    return new Promise((resolve) => {
       const sizeBeforeRemove = mockPosts.length;
-      const resultPosts = mockPosts.filter(post => post.id !== postId);
+      const resultPosts = mockPosts.filter(post => post.id !== id);
       const sizeAfterRemove = resultPosts.length;
 
       if (sizeBeforeRemove > sizeAfterRemove) {
@@ -65,21 +61,26 @@ class Post {
         resolve(true);
       }
 
-      reject('Post with this id not exist.');
+      resolve(false);
     });
   }
 
-  static findOne(postId) {
-    return new Promise((resolve, reject) => {
-      postId = Number(postId);
-      if (isNaN(postId)) reject('The id param must be a number.');
-
+  static findOne(id) {
+    return new Promise((resolve) => {
       mockPosts.forEach(post => {
-        if (post.id === postId) resolve(new Post(post.id, post.userId, post.title, post.html, post.dateOfCreation, 
-            post.dateOfModification));
+        if (post.id === id) {
+          resolve(new Post(post.id, post.userId, post.title, post.html, post.dateOfCreation, post.dateOfModification));
+        }
       });
 
-      reject('Post with this id not exist.');
+      resolve(null);
+    });
+  }
+
+  static findPostsByUserId(userId) {
+    return new Promise((resolve) => {
+      const findedPosts = mockPosts.filter(post => post.userId === userId);
+      resolve(findedPosts);
     });
   }
 }
