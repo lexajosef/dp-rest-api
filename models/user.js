@@ -15,8 +15,7 @@ class User {
   }
   
   generateAuthToken() {
-    return jwt.sign(
-      {
+    return jwt.sign({
         id: this.id,
         name: this.name,
         email: this.email,
@@ -26,16 +25,17 @@ class User {
     );
   }
   
-  static create(name, email, password) {
+  static create(userObject) {
     return new Promise((resolve) => {
-      if (sys.lastUserId) sys.lastUserId++;
-      else sys.lastUserId = 1;
+      if (sys.lastUserId) {
+        sys.lastUserId++;
+      } else {
+        sys.lastUserId = 1;
+      }
 
-      const user = new User(sys.lastUserId, name, email, password);
+      const user = new User(sys.lastUserId, userObject.name, userObject.email, userObject.password);
 
       mockUsers.push(user);
-
-      // TODO: try catch and reject promise
       fs.writeFileSync('./data/users.json', JSON.stringify(mockUsers));
       fs.writeFileSync('./data/sys.json', JSON.stringify(sys));
       
@@ -43,7 +43,36 @@ class User {
     });
   }
 
-  static findOne(email) {
+  static findOneAndUpdate(id, userObject) {
+    return new Promise((resolve) => {
+      mockUsers.forEach(user => {
+        if (user.id === id) {
+          user.name = userObject.name;
+          user.email = userObject.email;
+          user.password = userObject.password;
+          
+          fs.writeFileSync('./data/users.json', JSON.stringify(mockUsers));
+          resolve(new User(user.id, user.name, user.email, user.password));
+        }
+      });
+
+      resolve(null);
+    });
+  }
+
+  static findOne(id) {
+    return new Promise((resolve) => {
+      mockUsers.forEach(user => {
+        if (user.id === id) {
+          resolve(new User(user.id, user.name, user.email, user.password));
+        }
+      });
+
+      resolve(null);
+    });
+  }
+
+  static findOneByEmail(email) {
     return new Promise((resolve) => {
       mockUsers.forEach(user => {
         if (user.email === email) {
