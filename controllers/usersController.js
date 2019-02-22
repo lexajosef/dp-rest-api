@@ -13,6 +13,23 @@ function validate(userObject) {
   return Joi.validate(userObject, schema);
 }
 
+function checkPermsAndGetUserId(req, res, checkAdmin) {
+  // parse param to number
+  let id;
+  if (req.params.userId === 'me') {
+    id = req.user.id;
+  } else if(checkAdmin && !req.user.isAdmin) {
+    res.status(403).send('Access forbidden.');
+  } else {
+    id = Number(req.params.userId);
+    if (isNaN(id)) {
+      res.status(400).send('The user id param must be a number.');
+    }
+  }
+
+  return id;
+}
+
 class UsersController {
 
   static async createUser(req, res) {
@@ -31,8 +48,9 @@ class UsersController {
     // create new user through model
     user = await User.create({
       name: req.body.name, 
-      email: req.body.email, password: 
-      req.body.password
+      email: req.body.email, 
+      password: req.body.password,
+      isAdmin: false
     });
 
     // send user in response to client
@@ -40,11 +58,7 @@ class UsersController {
   }
 
   static async editUser(req, res) {
-    // parse param to number
-    const id = Number(req.params.userId);
-    if (isNaN(id)) {
-      res.status(400).send('The user id param must be a number.');
-    }
+    const id = checkPermsAndGetUserId(req, res, true);
 
     // validate req body
     const { error } = validate(req.body);
@@ -65,11 +79,7 @@ class UsersController {
   }
 
   static async getUser(req, res) {
-    // parse param to number
-    const id = Number(req.params.userId);
-    if (isNaN(id)) {
-      res.status(400).send('The user id param must be a number.');
-    }
+    const id = checkPermsAndGetUserId(req, res, false);
 
     const user = await User.findOne(id);
     if (!user) {
@@ -80,12 +90,8 @@ class UsersController {
   }
 
   static async getUserPosts(req, res) {
-    // parse param to number
-    const id = Number(req.params.userId);
-    if (isNaN(id)) {
-      res.status(400).send('The user id param must be a number.');
-    }
-
+    const id = checkPermsAndGetUserId(req, res, false);
+    
     const posts = await Post.findPostsByUserId(id);
     
     res.send(posts);

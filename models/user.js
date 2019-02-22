@@ -7,11 +7,12 @@ const fs = require('fs');
 
 class User {
 
-  constructor(id, name, email, password) {
+  constructor(id, name, email, password, isAdmin) {
     this.id = id;
     this.name = name;
     this.email = email;
     this.password = password;
+    this.isAdmin = isAdmin;
   }
   
   generateAuthToken() {
@@ -19,7 +20,8 @@ class User {
         id: this.id,
         name: this.name,
         email: this.email,
-        password: this.password
+        password: this.password,
+        isAdmin: this.isAdmin
       },
       config.get('jwtPrivateKey')
     );
@@ -33,7 +35,7 @@ class User {
         sys.lastUserId = 1;
       }
 
-      const user = new User(sys.lastUserId, userObject.name, userObject.email, userObject.password);
+      const user = new User(sys.lastUserId, userObject.name, userObject.email, userObject.password, userObject.isAdmin);
 
       mockUsers.push(user);
       fs.writeFileSync('./data/users.json', JSON.stringify(mockUsers));
@@ -52,7 +54,7 @@ class User {
           user.password = userObject.password;
           
           fs.writeFileSync('./data/users.json', JSON.stringify(mockUsers));
-          resolve(new User(user.id, user.name, user.email, user.password));
+          resolve(new User(user.id, user.name, user.email, user.password, user.isAdmin));
         }
       });
 
@@ -64,7 +66,7 @@ class User {
     return new Promise((resolve) => {
       mockUsers.forEach(user => {
         if (user.id === id) {
-          resolve(new User(user.id, user.name, user.email, user.password));
+          resolve(new User(user.id, user.name, user.email, user.password, user.isAdmin));
         }
       });
 
@@ -76,7 +78,7 @@ class User {
     return new Promise((resolve) => {
       mockUsers.forEach(user => {
         if (user.email === email) {
-          resolve(new User(user.id, user.name, user.email, user.password));
+          resolve(new User(user.id, user.name, user.email, user.password, user.isAdmin));
         }
       });
 

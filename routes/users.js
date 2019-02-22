@@ -10,7 +10,7 @@ router.post('/', (req, res) => {
 
 router.put('/:userId', auth, (req, res) => {
   usersController.editUser(req, res);
-})
+});
 
 router.get('/:userId', auth, (req, res) => {
   usersController.getUser(req, res);
