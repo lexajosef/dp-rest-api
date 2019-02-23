@@ -19,11 +19,11 @@ function checkPermsAndGetUserId(req, res, checkAdmin) {
   if (req.params.userId === 'me') {
     id = req.user.id;
   } else if(checkAdmin && !req.user.isAdmin) {
-    res.status(403).send('Access forbidden.');
+    return res.status(403).send('Access forbidden.');
   } else {
     id = Number(req.params.userId);
     if (isNaN(id)) {
-      res.status(400).send('The user id param must be a number.');
+      return res.status(400).send('The user id param must be a number.');
     }
   }
 
@@ -62,7 +62,9 @@ class UsersController {
 
     // validate req body
     const { error } = validate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+    if (error) {
+      return res.status(400).send(error.details[0].message);
+    }
 
     // edit user
     const user = await User.findOneAndUpdate(id, {

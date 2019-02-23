@@ -2,7 +2,6 @@ const Post = require('../models/post');
 const Joi = require('joi');
 
 function validate(postObject) {
-  // TODO: validate post object
   const schema = {
     title: Joi.string().required().max(255),
     html: Joi.string().required()
@@ -11,14 +10,14 @@ function validate(postObject) {
   return Joi.validate(postObject, schema);
 }
 
-function parseId(req, res) {
+function parseId(id) {
   // parse param to number
-  const id = Number(req.params.postId);
+  const result = Number(id);
   if (isNaN(id)) {
-    res.status(400).send('The post id param must be a number.');
+    return -1;
   }
 
-  return id;
+  return result;
 }
 
 class PostsController {
@@ -26,7 +25,9 @@ class PostsController {
   static async createPost(req, res) {
     // validate req body
     const { error } = validate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+    if (error) {
+      return res.status(400).send(error.details[0].message);
+    }
 
     let post = await Post.create(req.user.id, req.body.title, req.body.html, Date(), Date());
 
@@ -35,7 +36,10 @@ class PostsController {
   }
 
   static async editPost(req, res) {
-    const id = parseId(req, res);
+    const id = parseId(req.params.postId);
+    if (id === -1) {
+      return res.status(400).send('The post id param must be a number.');
+    }
 
     // validate req body
     const { error } = validate(req.body);
@@ -50,22 +54,25 @@ class PostsController {
     });
 
     if (!post) {
-      res.status(404).send('Post with this id not exist.');
+      return res.status(404).send('Post with this id not exist.');
     }
 
     res.send(post);
   }
   
   static async deletePost(req, res) {
-    const id = parseId(req, res);
+    const id = parseId(req.params.postId);
+    if (id === -1) {
+      return res.status(400).send('The post id param must be a number.');
+    }
 
     if (!req.user.isAdmin) {
       const post = await Post.findOne(id);
 
       if (!post) {
-        res.status(404).send('Post with this id not exist.');
+        return res.status(404).send('Post with this id not exist.');
       } else if (post.userId !== req.user.id) {
-        res.status(403).send('Access forbidden.');
+        return res.status(403).send('Access forbidden.');
       }
     }
 
@@ -78,11 +85,14 @@ class PostsController {
   }
 
   static async getPost(req, res) {
-    const id = parseId(req, res);
+    const id = parseId(req.params.postId);
+    if (id === -1) {
+      return res.status(400).send('The post id param must be a number.');
+    }
 
     const post = await Post.findOne(id);
     if (!post) {
-      res.status(404).send('Post with this id not exist.');
+      return res.status(404).send('Post with this id not exist.');
     }
 
     res.send(post);
