@@ -1,19 +1,16 @@
 const express = require('express');
 const router = express.Router();
+
 const auth = require('../middleware/authorization');
+const CommentsController = require('../controllers/commentsController');
 
 router.post('/', auth, (req, res) => {
-  // TODO: implement
-});
-
-router.get('/:commentId', (req, res) => {
-  req.params.postId = req.postId; // retrive postId parameter from req to its params
-  res.send(req.params);
-  // TODO: implement
+  req.params.postId = req.postId; // retrive postId parameter
+  CommentsController.createComment(req, res);
 });
 
 router.delete('/:commentId', auth, (req, res) => {
-  // TODO: implement
+  CommentsController.deleteComment(req, res);
 });
 
 module.exports = router;

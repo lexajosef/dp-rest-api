@@ -3,22 +3,22 @@ const router = express.Router();
 
 const auth = require('../middleware/authorization');
 const comments = require('./comments');
-const postsController = require('../controllers/postsController');
+const PostsController = require('../controllers/postsController');
 
 router.post('/', auth, (req, res) => {
-  postsController.createPost(req, res);
+  PostsController.createPost(req, res);
 });
 
 router.put('/:postId', auth, (req, res) => {
-  postsController.editPost(req, res);
+  PostsController.editPost(req, res);
 });
 
 router.get('/:postId', auth, (req, res) => {
-  postsController.getPost(req, res);
+  PostsController.getPost(req, res);
 });
 
 router.delete('/:postId', auth, (req, res) => {
-  postsController.deletePost(req, res);
+  PostsController.deletePost(req, res);
 });
 
 // Add comments sub-resource of posts
