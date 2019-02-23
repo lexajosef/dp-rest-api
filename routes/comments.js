@@ -10,6 +10,7 @@ router.post('/', auth, (req, res) => {
 });
 
 router.delete('/:commentId', auth, (req, res) => {
+  req.params.postId = req.postId; // retrive postId parameter
   CommentsController.deleteComment(req, res);
 });
 
