@@ -11,6 +11,16 @@ function validate(postObject) {
   return Joi.validate(postObject, schema);
 }
 
+function parseId(req, res) {
+  // parse param to number
+  const id = Number(req.params.postId);
+  if (isNaN(id)) {
+    res.status(400).send('The post id param must be a number.');
+  }
+
+  return id;
+}
+
 class PostsController {
 
   static async createPost(req, res) {
@@ -25,11 +35,7 @@ class PostsController {
   }
 
   static async editPost(req, res) {
-    // parse param to number
-    const id = Number(id);
-    if (isNaN(id)) {
-      res.status(400).send('The postId param must be a number.');
-    }
+    const id = parseId(req, res);
 
     // validate req body
     const { error } = validate(req.body);
@@ -51,13 +57,19 @@ class PostsController {
   }
   
   static async deletePost(req, res) {
-    // parse param to number
-    const id = Number(id);
-    if (isNaN(id)) {
-      res.status(400).send('The postId param must be a number.');
+    const id = parseId(req, res);
+
+    if (!req.user.isAdmin) {
+      const post = await Post.findOne(id);
+
+      if (!post) {
+        res.status(404).send('Post with this id not exist.');
+      } else if (post.userId !== req.user.id) {
+        res.status(403).send('Access forbidden.');
+      }
     }
 
-    const result = await Post.delete(req.params.postId);
+    const result = await Post.delete(id);
     if (result) {
       res.send('The post has been deleted.');
     } else {
@@ -66,13 +78,9 @@ class PostsController {
   }
 
   static async getPost(req, res) {
-    // parse param to number
-    const id = Number(id);
-    if (isNaN(id)) {
-      reject('The id param must be a number.');
-    }
+    const id = parseId(req, res);
 
-    const post = await Post.findOne(req.params.postId);
+    const post = await Post.findOne(id);
     if (!post) {
       res.status(404).send('Post with this id not exist.');
     }
