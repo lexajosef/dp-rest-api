@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const bcrypt = require('bcrypt');
 
 const User = require('../models/user');
 const Post = require('../models/post');
@@ -45,11 +46,15 @@ class UsersController {
       return res.status(400).send('User already registred.');
     }
 
+    // hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
     // create new user through model
     user = await User.create({
       name: req.body.name, 
       email: req.body.email, 
-      password: req.body.password,
+      password: hashedPassword,
       isAdmin: false
     });
 

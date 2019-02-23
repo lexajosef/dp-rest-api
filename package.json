@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/lexajosef/dp-rest-api#readme",
   "dependencies": {
+    "bcrypt": "^3.0.4",
     "config": "^3.0.1",
     "express": "^4.16.4",
     "express-bearer-token": "^2.2.0",

@@ -1,5 +1,7 @@
-const User = require('../models/user');
 const Joi = require('joi');
+const bcrypt = require('bcrypt');
+
+const User = require('../models/user');
 
 function validate(userObject) {
   const schema = {
@@ -25,8 +27,9 @@ class AuthController {
       return res.status(400).send('Invalid user.');
     }
 
-    // validate password TODO: with some hashing
-    if (user.password !== req.body.password) {
+    // validate password
+    const validPassword = await bcrypt.compare(req.body.password, user.password);
+    if (!validPassword) {
       return res.status(400).send('Invalid password.');
     }
 
