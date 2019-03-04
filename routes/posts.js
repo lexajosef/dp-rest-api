@@ -9,6 +9,10 @@ router.post('/', auth, (req, res) => {
   PostsController.createPost(req, res);
 });
 
+router.get('/', auth, (req, res) => {
+  PostsController.getPosts(req, res);
+});
+
 router.put('/:postId', auth, (req, res) => {
   PostsController.editPost(req, res);
 });

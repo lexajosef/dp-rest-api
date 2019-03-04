@@ -20,6 +20,12 @@ function parseId(id) {
   return result;
 }
 
+function badFilterParams(req) {
+  return ((req.query.limit && (isNaN(req.query.limit) || req.query.limit < 0)) 
+      || (req.query.offset && (isNaN(req.query.offset) || req.query.offset < 0)) 
+      || (req.query.order && req.query.order !== 'asc' && req.query.order !== 'desc'));
+}
+
 class PostsController {
 
   static async createPost(req, res) {
@@ -82,6 +88,23 @@ class PostsController {
     } else {
       res.status(404).send('Post with this id not exist.');
     }
+  }
+
+  static async getPosts(req, res) {
+    if (badFilterParams(req)) {
+      return res.status(400).send('Bad filter parameters.');      
+    }
+
+    const limit = req.query.limit || 0;
+    const offset = req.query.offset || 0;
+    const order = req.query.order || 'asc';
+
+    const posts = await Post.getRange(limit, offset, order);
+    if (posts.length === 0) {
+      return res.status(404).send('The posts for this filter not exist.');
+    }
+
+    res.send(posts);
   }
 
   static async getPost(req, res) {

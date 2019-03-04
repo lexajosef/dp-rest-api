@@ -76,6 +76,31 @@ class Post {
     });
   }
 
+  static getRange(limit, offset, order) {
+    return new Promise((resolve) => {
+      let resultPosts = mockPosts.slice(0);
+
+      // sorting
+      if (order === 'desc') {
+        resultPosts.sort((a, b) => { return (new Date(b.dateOfModification) - new Date(a.dateOfModification)); });
+      } else {
+        resultPosts.sort((a, b) => { return (new Date(a.dateOfModification) - new Date(b.dateOfModification)); });
+      }
+
+      // do not slice array, if it is not necessary
+      if (offset !== 0 || limit !== 0) {
+        // limit and offset   
+        if (limit === 0) {
+          resultPosts = resultPosts.slice(offset);
+        } else {
+          resultPosts = resultPosts.slice(offset, Number(offset) + Number(limit));
+        }
+      }   
+
+      resolve(resultPosts);
+    });
+  }
+
   static findOne(id) {
     return new Promise((resolve) => {
       mockPosts.forEach(post => {
