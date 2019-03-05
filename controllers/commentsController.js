@@ -35,6 +35,7 @@ class CommentsController {
 
     const comment = await Post.createComment(postId, {
       userId: req.user.id,
+      userName: req.user.name,
       text: req.body.text,
       dateOfCreation: Date()
     });

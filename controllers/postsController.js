@@ -35,7 +35,14 @@ class PostsController {
       return res.status(400).send(error.details[0].message);
     }
 
-    let post = await Post.create(req.user.id, req.body.title, req.body.html, Date(), Date());
+    let post = await Post.create({
+      userId: req.user.id, 
+      userName: req.user.name, 
+      title: req.body.title, 
+      html: req.body.html, 
+      dateOfCreation: Date(), 
+      dateOfModification: Date()
+    });
 
     // send new post in response to client
     res.send(post);

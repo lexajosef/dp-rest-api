@@ -5,9 +5,10 @@ const fs = require('fs');
 
 class Comment {
 
-  constructor(id, userId, text, dateOfCreation) {
+  constructor(id, userId, userName, text, dateOfCreation) {
     this.id = id;
     this.userId = userId;
+    this.userName = userName;
     this.text = text;
     this.dateOfCreation = dateOfCreation;
   }
@@ -15,9 +16,10 @@ class Comment {
 
 class Post {
 
-  constructor(id, userId, title, html, dateOfCreation, dateOfModification, comments, lastCommentId) {
+  constructor(id, userId, userName, title, html, dateOfCreation, dateOfModification, comments, lastCommentId) {
     this.id = id;
     this.userId = userId;
+    this.userName = userName;
     this.title = title;
     this.html = html;
     this.dateOfCreation = dateOfCreation;
@@ -26,7 +28,7 @@ class Post {
     this.lastCommentId = lastCommentId;
   }
 
-  static create(userId, title, html, dateOfCreation, dateOfModification) {
+  static create(postObject) {
     return new Promise((resolve) => {
       if (sys.lastPostId) {
         sys.lastPostId++;
@@ -34,7 +36,8 @@ class Post {
         sys.lastPostId = 1;
       }
 
-      const post = new Post(sys.lastPostId, userId, title, html, dateOfCreation, dateOfModification, [], 0);
+      const post = new Post(sys.lastPostId, postObject.userId, postObject.userName, postObject.title, postObject.html, 
+          postObject.dateOfCreation, postObject.dateOfModification, [], 0);
 
       mockPosts.push(post);
       fs.writeFileSync('./data/posts.json', JSON.stringify(mockPosts));
@@ -143,8 +146,8 @@ class Post {
       mockPosts.forEach(post => {
         if (post.id === postId) {
           post.lastCommentId++;
-          const comment = new Comment(post.lastCommentId, commentObject.userId, commentObject.text, 
-              commentObject.dateOfCreation);
+          const comment = new Comment(post.lastCommentId, commentObject.userId, commentObject.userName, 
+              commentObject.text, commentObject.dateOfCreation);
           post.comments.push(comment);
 
           fs.writeFileSync('./data/posts.json', JSON.stringify(mockPosts));
