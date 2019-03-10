@@ -122,9 +122,18 @@ class Post {
     });
   }
 
-  static findPostsByUserId(userId) {
+  static findPostsByUserId(userId, order) {
     return new Promise((resolve) => {
+      // find user posts
       const findedPosts = mockPosts.filter(post => post.userId === userId);
+
+      // sorting
+      if (order === 'desc') {
+        findedPosts.sort((a, b) => { return (new Date(b.dateOfModification) - new Date(a.dateOfModification)); });
+      } else {
+        findedPosts.sort((a, b) => { return (new Date(a.dateOfModification) - new Date(b.dateOfModification)); });
+      }
+      
       resolve(findedPosts);
     });
   }

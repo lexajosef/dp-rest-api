@@ -99,7 +99,12 @@ class UsersController {
   static async getUserPosts(req, res) {
     const id = checkPermsAndGetUserId(req, res, false);
     
-    const posts = await Post.findPostsByUserId(id);
+    if (req.query.order && req.query.order !== 'asc' && req.query.order !== 'desc') {
+      return res.status(400).send('Bad filter parameters.');
+    }
+    const order = req.query.order || 'asc';
+    
+    const posts = await Post.findPostsByUserId(id, order);
     
     res.send(posts);
   }
