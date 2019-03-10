@@ -1,4 +1,4 @@
-const mockPosts = require('../data/posts.json');
+let mockPosts = require('../data/posts.json');
 const sys = require('../data/sys.json');
 
 const fs = require('fs');
@@ -67,15 +67,21 @@ class Post {
   static delete(id) {
     return new Promise((resolve) => {
       const sizeBeforeRemove = mockPosts.length;
-      const resultPosts = mockPosts.filter(post => post.id !== id);
-      const sizeAfterRemove = resultPosts.length;
+      mockPosts = mockPosts.filter(post => post.id !== id);
+      const sizeAfterRemove = mockPosts.length;
 
       if (sizeBeforeRemove > sizeAfterRemove) {
-        fs.writeFileSync('./data/posts.json', JSON.stringify(resultPosts));
-        resolve(true);
+        fs.writeFile('./data/posts.json', JSON.stringify(mockPosts), error => {
+          if (error) {
+            console.error(error);
+            resolve(false);
+          } else {
+            resolve(true);
+          }
+        });
+      } else {
+        resolve(false);
       }
-
-      resolve(false);
     });
   }
 

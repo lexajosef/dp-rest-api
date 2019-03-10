@@ -19,7 +19,7 @@ router.put('/:postId', auth, (req, res) => {
 
 router.get('/:postId', auth, (req, res) => {
   PostsController.getPost(req, res);
-});
+}); 
 
 router.delete('/:postId', auth, (req, res) => {
   PostsController.deletePost(req, res);
