@@ -85,7 +85,7 @@ class Post {
     });
   }
 
-  static getRange(limit, offset, order) {
+  static getRange(limit, offset, order, withoutUser) {
     return new Promise((resolve) => {
       let resultPosts = mockPosts.slice(0);
 
@@ -94,6 +94,11 @@ class Post {
         resultPosts.sort((a, b) => { return (new Date(b.dateOfModification) - new Date(a.dateOfModification)); });
       } else {
         resultPosts.sort((a, b) => { return (new Date(a.dateOfModification) - new Date(b.dateOfModification)); });
+      }
+
+      // filtered posts by user id param in withoutUser 
+      if (withoutUser) {
+        resultPosts = resultPosts.filter(post => post.userId !== Number(withoutUser));
       }
 
       // do not slice array, if it is not necessary

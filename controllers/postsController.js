@@ -23,7 +23,9 @@ function parseId(id) {
 function badFilterParams(req) {
   return ((req.query.limit && (isNaN(req.query.limit) || req.query.limit < 0)) 
       || (req.query.offset && (isNaN(req.query.offset) || req.query.offset < 0)) 
-      || (req.query.order && req.query.order !== 'asc' && req.query.order !== 'desc'));
+      || (req.query.order && req.query.order !== 'asc' && req.query.order !== 'desc')
+      || (req.query.withoutUser && (isNaN(req.query.withoutUser) || req.query.withoutUser < 1))
+    );
 }
 
 class PostsController {
@@ -105,8 +107,9 @@ class PostsController {
     const limit = req.query.limit || 0;
     const offset = req.query.offset || 0;
     const order = req.query.order || 'asc';
+    const withoutUser = req.query.withoutUser || undefined;
 
-    const posts = await Post.getRange(limit, offset, order);
+    const posts = await Post.getRange(limit, offset, order, withoutUser);
     if (posts.length === 0) {
       return res.status(404).send('The posts for this filter not exist.');
     }

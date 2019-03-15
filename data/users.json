@@ -1,1 +1,16 @@
-[{"id":10,"name":"Josef Lexa","email":"lexa@gmail.com","password":"$2b$10$VPEe/EgkzVGUtmNKg3II4e/x8.6hjXimE6qTkjv3nQxXXXzzE97oi","isAdmin":true},{"id":11,"name":"Marketa Bartova","email":"bartmark@gmail.com","password":"$2b$10$eTgodXrB.CaouSzjTMkRf.HKL/FGFedPzqtJtLaOT7f3sPRcGigt.","isAdmin":false}]
+[
+  {
+    "id": 10,
+    "name": "Josef Lexa",
+    "email": "lexa@gmail.com",
+    "password": "$2b$10$VPEe/EgkzVGUtmNKg3II4e/x8.6hjXimE6qTkjv3nQxXXXzzE97oi",
+    "isAdmin": true
+  },
+  {
+    "id": 11,
+    "name": "Marketa Bartova",
+    "email": "bartmark@gmail.com",
+    "password": "$2b$10$eTgodXrB.CaouSzjTMkRf.HKL/FGFedPzqtJtLaOT7f3sPRcGigt.",
+    "isAdmin": false
+  }
+]
