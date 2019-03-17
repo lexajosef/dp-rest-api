@@ -62,6 +62,12 @@ class UsersController {
     res.send(user);
   }
 
+  static async getAll(req, res) {
+    const users = await User.getAll();
+
+    res.send(users);
+  }
+
   static async editUser(req, res) {
     const id = checkPermsAndGetUserId(req, res, true);
 

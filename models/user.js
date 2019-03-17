@@ -45,6 +45,12 @@ class User {
     });
   }
 
+  static getAll() {
+    return new Promise((resolve) => {
+      resolve(mockUsers);
+    })
+  }
+
   static findOneAndUpdate(id, userObject) {
     return new Promise((resolve) => {
       mockUsers.forEach(user => {

@@ -8,6 +8,10 @@ router.post('/', (req, res) => {
   UsersController.createUser(req, res);
 });
 
+router.get('/', (req, res) => {
+  UsersController.getAll(req, res);
+})
+
 router.put('/:userId', auth, (req, res) => {
   UsersController.editUser(req, res);
 });
