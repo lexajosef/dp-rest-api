@@ -47,7 +47,8 @@ class User {
 
   static getAll() {
     return new Promise((resolve) => {
-      resolve(mockUsers);
+      // users without password property
+      resolve(mockUsers.map(({password, ...attrs}) => attrs));
     })
   }
 

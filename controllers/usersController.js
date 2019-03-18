@@ -93,13 +93,19 @@ class UsersController {
 
   static async getUser(req, res) {
     const id = checkPermsAndGetUserId(req, res, false);
-
-    const user = await User.findOne(id);
+    
+    let user = await User.findOne(id);
     if (!user) {
       return res.status(404).send('User with this id not found.');
     }
-
-    res.send(user);
+    
+    // send user without password property
+    res.send({
+      "id": user.id,
+      "name": user.name,
+      "email": user.email,
+      "isAdmin": user.isAdmin
+    });
   }
 
   static async getUserPosts(req, res) {
